@@ -1,6 +1,7 @@
 package gdut.ff;
 
 import gdut.ff.domain.User;
+import gdut.ff.domain.request.UserRequest;
 import gdut.ff.service.IUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ public class UserServiceTest {
 
     @Test
     public void test() {
+        UserRequest request = new UserRequest();
         User user = new User();
         user.setUsername("liuffei");
         user.setPassword("123");

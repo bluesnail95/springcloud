@@ -1,7 +1,8 @@
-package gdut.ff.service;
+package gdut.ff.service.impl;
 
 import gdut.ff.domain.User;
 import gdut.ff.mapper.MyRowMapper;
+import gdut.ff.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;

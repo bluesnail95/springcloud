@@ -3,8 +3,10 @@ package gdut.ff.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.mysql.jdbc.StringUtils;
 import gdut.ff.domain.User;
+import gdut.ff.domain.request.UserRequest;
 import gdut.ff.exception.LoginArgumentsException;
 import gdut.ff.exception.LoginException;
+import gdut.ff.exception.PasswordException;
 import gdut.ff.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,18 +35,18 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value="/ssoLogin")
-    public JSONObject ssoLogin(HttpServletRequest request,@RequestBody User user) {
+    public JSONObject ssoLogin(HttpServletRequest request,@RequestBody UserRequest userRequest) {
         JSONObject result = new JSONObject();
         boolean isLogin = false;
         //1.从cookies中获取JSESSIONID
         Cookie cookies[] = request.getCookies();
         if(null == cookies || cookies.length == 0) {
             //如果JSESSION不存在，就根据用户名密码登录
-            if(null == user || StringUtils.isNullOrEmpty(user.getUsername()) ||
-                    StringUtils.isNullOrEmpty(user.getPassword())) {
+            if(null == userRequest || StringUtils.isNullOrEmpty(userRequest.getUsername()) ||
+                    StringUtils.isNullOrEmpty(userRequest.getPassword())) {
                 throw new LoginArgumentsException("请传递用户名和密码");
             }
-            User loginUser = userService.findOneUser(user.getUsername(), user.getPassword());
+            User loginUser = userService.findOneUser(userRequest.getUsername(), userRequest.getPassword());
             if(null == loginUser) {
                 throw new LoginException("用户名或密码错误");
             }
@@ -103,6 +105,27 @@ public class LoginController {
             result.put("msg","退出登录失败");
             result.put("code",300);
         }
+        return result;
+    }
+
+    /**
+     * 注册
+     * @return
+     */
+    public JSONObject regist(HttpServletRequest request,@RequestBody UserRequest userRequest) {
+        JSONObject result = new JSONObject();
+        if(null == userRequest || StringUtils.isNullOrEmpty(userRequest.getUsername()) ||
+                StringUtils.isNullOrEmpty(userRequest.getPassword()) ||
+                StringUtils.isNullOrEmpty(userRequest.getConfirmPassword())) {
+            throw new LoginArgumentsException("请传递用户名和密码");
+        }
+        if(!userRequest.getPassword().equals(userRequest.getConfirmPassword())) {
+            throw new PasswordException("两次输入的密码不正确，请重新输入");
+        }
+        User user = new User();
+        user.setPassword(userRequest.getPassword());
+        user.setUsername(userRequest.getUsername());
+        userService.insert(user);
         return result;
     }
 }

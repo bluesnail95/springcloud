@@ -77,6 +77,12 @@
       <artifactId>mysql-connector-java</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>gdut.ff</groupId>
+      <artifactId>sso.api</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
   </dependencies>
 
   <build>
