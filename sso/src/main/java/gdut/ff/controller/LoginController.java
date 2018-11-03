@@ -7,6 +7,7 @@ import gdut.ff.exception.LoginArgumentsException;
 import gdut.ff.exception.LoginException;
 import gdut.ff.exception.PasswordException;
 import gdut.ff.service.IUserService;
+import gdut.ff.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,46 +37,23 @@ public class LoginController {
     @RequestMapping(value="/ssoLogin")
     public JSONObject ssoLogin(HttpServletRequest request,@RequestBody JSONObject requestJson) {
         JSONObject result = new JSONObject();
-        boolean isLogin = false;
-        //1.从cookies中获取JSESSIONID
-        Cookie cookies[] = request.getCookies();
-        if(null == cookies || cookies.length == 0) {
-            //如果JSESSION不存在，就根据用户名密码登录
+        User user = SessionUtil.getCurrentUser();
+        if(null == user) {
             String username = requestJson.getString("username");
             String password = requestJson.getString("password");
             if(StringUtils.isNullOrEmpty(username) ||
                     StringUtils.isNullOrEmpty(password)) {
                 throw new LoginArgumentsException("请传递用户名和密码");
             }
-            User loginUser = userService.findOneUser(username, password);
-            if(null == loginUser) {
+            user = userService.findOneUser(username, password);
+            if(null == user) {
                 throw new LoginException("用户名或密码错误");
             }
-            String jSessionId = request.getSession().getId();
-            //以key=jSessionId，value=loginUser的形式存储在Redis中
-            redisTemplate.opsForValue().set(jSessionId,loginUser);
-            result.put("msg","登录成功");
-            result.put("user",loginUser);
-            result.put("code",200);
-            return result;
+            SessionUtil.setUser(user);
         }
-        for(int i = 0;i < cookies.length;i++) {
-            Cookie cookie = cookies[i];
-            String cookieName = cookie.getName();
-            if("JSESSIONID".equals(cookieName)) {
-                //根据cookieValue获取用户的登录密码，进行直接登录。
-                String cookieValue = cookie.getValue();
-                if(!redisTemplate.hasKey(cookieValue)) {
-                    throw new LoginException("Cookie 已经失效，请重新登录");
-                }
-                User loginUser = (User) redisTemplate.opsForValue().get(cookieValue);
-                if(null != loginUser) {
-                    result.put("msg","登录成功");
-                    result.put("user",loginUser);
-                    result.put("code",200);
-                }
-            }
-        }
+        result.put("msg","登录成功");
+        result.put("user",user);
+        result.put("code",200);
         return result;
     }
 
@@ -85,27 +63,9 @@ public class LoginController {
     @RequestMapping(value="/logout")
     public JSONObject logout(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        boolean isDelete = false;
-        Cookie cookies[] = request.getCookies();
-        if(null != cookies && cookies.length > 0) {
-            for(int i = 0;i < cookies.length;i++) {
-                Cookie cookie = cookies[i];
-                String cookieKey = cookie.getName();
-                if(cookieKey.equals("JSESSIONID")) {
-                    String cookieValue = cookie.getValue();
-                    isDelete = redisTemplate.delete(cookieValue);
-                }
-
-
-            }
-        }
-        if(isDelete) {
-            result.put("msg","退出登录成功");
-            result.put("code",200);
-        }else {
-            result.put("msg","退出登录失败");
-            result.put("code",300);
-        }
+        SessionUtil.invalidateSession();
+        result.put("msg","退出登录失败");
+        result.put("code",300);
         return result;
     }
 
