@@ -4,9 +4,7 @@ import org.junit.Test;
 import redis.clients.jedis.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class RedisTest {
@@ -45,7 +43,7 @@ public class RedisTest {
         jedis.auth("19950821abc");
         jedis.set("hello","world");
         System.out.println(jedis.get("hello"));
-
+        jedis.close();
     }
 
 }
