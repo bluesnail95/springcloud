@@ -34,7 +34,6 @@ public class UserServiceTest {
 
     @Test
     public void testRedisConfig() {
-        redisConfig.init();
         redisConfig.addHKey("loginSessionMap","1","liufeifei");
         redisConfig.addHKey("loginSessionMap","2","Sophie");
 
@@ -42,8 +41,6 @@ public class UserServiceTest {
         for(Map.Entry<String, Object> session:loginSessionMap.entrySet()) {
             System.out.println(session.getKey()+":" +session.getValue());
         }
-
-
     }
 
 }
