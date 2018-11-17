@@ -1,18 +1,17 @@
-package gdut.ff;
+package ff;
 
 import org.springframework.boot.SpringApplication;
-
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * 2018-09-13
+ * 2018-09-16
  * liuffei
  */
 @ComponentScan(basePackages = "gdut.ff")
 @EnableAutoConfiguration
-@EnableEurekaServer
+@EnableDiscoveryClient
 public class Main {
 
     public static void main(String args[]) {
@@ -21,4 +20,3 @@ public class Main {
 
 
 }
-

@@ -52,6 +52,7 @@ public class LoginController {
             result.put("msg","登录成功");
             result.put("user",user);
             result.put("code",200);
+            return result;
         }
         String username = requestJson.getString("username");
         String password = requestJson.getString("password");
@@ -67,6 +68,10 @@ public class LoginController {
         token = UUID.randomUUID().toString();
         redisConfig.addKey(ConstantUtil.REDIS_LOGIN_KEY + ":" + token, JSONObject.toJSONString(user));
         redisConfig.expireKey(ConstantUtil.REDIS_LOGIN_KEY + ":" + token, 30, TimeUnit.DAYS);
+        result.put("msg","登录成功");
+        result.put("user",user);
+        result.put("code",200);
+        result.put("token",token);
         return result;
     }
 

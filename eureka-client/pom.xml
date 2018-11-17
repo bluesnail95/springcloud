@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>gdut.ff</groupId>
-  <artifactId>sso</artifactId>
+  <artifactId>eureka-client</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>sso Maven Webapp</name>
+  <name>redis Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -19,7 +19,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
-  <!-- Inherit defaults from Spring Boot -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -27,12 +26,6 @@
   </parent>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -62,15 +55,16 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!--
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-redis</artifactId>
-    </dependency>
-    -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
 
     <dependency>
@@ -84,40 +78,27 @@
     </dependency>
 
     <dependency>
-      <groupId>gdut.ff</groupId>
-      <artifactId>sso.api</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-    <!--
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-    </dependency>
-    -->
-
-    <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
 
   </dependencies>
 
   <dependencyManagement>
-      <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
-        <dependency>
-          <groupId>org.springframework.cloud</groupId>
-          <artifactId>spring-cloud-dependencies</artifactId>
-          <version>Finchley.RELEASE</version>
-          <type>pom</type>
-          <scope>import</scope>
-        </dependency>
-      </dependencies>
+    <dependencies>
+      <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>Finchley.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
 
   <build>
-    <finalName>sso</finalName>
+    <finalName>redis</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
@@ -156,6 +137,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-
 </project>
