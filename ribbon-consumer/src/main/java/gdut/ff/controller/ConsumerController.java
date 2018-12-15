@@ -34,4 +34,9 @@ public class ConsumerController {
     public String helloUserAsync() {
         return userService.getUserByIdAsync(1).toString();
     }
+
+    @RequestMapping(value = "/ribbon-user-exception", method = RequestMethod.GET)
+    public void helloUserException() {
+        userService.getUserThrowException();
+    }
 }
