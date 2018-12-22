@@ -1,12 +1,12 @@
 package gdut.ff.domain;
 
-public class User {
+public class User2 {
 
     private String message;
 
     private int id;
 
-    public User(int id,String message) {
+    public User2(int id,String message) {
         this.id = id;
         this.message = message;
     }
