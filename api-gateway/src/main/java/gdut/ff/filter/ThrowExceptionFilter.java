@@ -43,6 +43,6 @@ public class ThrowExceptionFilter extends ZuulFilter {
     }
 
     private void doSomething() {
-        throw new RuntimeException("Exist some errors");
+        //throw new RuntimeException("Exist some errors");
     }
 }
